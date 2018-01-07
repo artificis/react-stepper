@@ -17,15 +17,19 @@ const styles = {
 };
 
 function Stepper({
-  activeStep, steps, disabledSteps,
-  activeColor, completeColor, defaultColor, circleFontColor,
+  activeStep, steps, completedSteps,
+  activeColor, completeColor, defaultColor,
+  circleFontColor, activeCircleFontColor, completeCircleFontColor,
   activeTitleColor, completeTitleColor, defaultTitleColor,
-  size, circleFontSize, titleFontSize,
+  size, activeCircleSize, circleFontSize, activeCircleFontSize, titleFontSize,
   circleTop, titleTop, completeOpacity, activeOpacity, defaultOpacity,
   completeTitleOpacity, activeTitleOpacity, defaultTitleOpacity, barStyle,
   defaultBorderColor, completeBorderColor, activeBorderColor, defaultBorderStyle,
-  completeBorderStyle, activeBorderStyle, defaultBarColor, completeBarColor
+  completeBorderStyle, activeBorderStyle, defaultBarColor, completeBarColor,
+  defaultBarThickness, completeBarThickness
 }) {
+  const activeCompleted = completedSteps.includes(activeStep.toString());
+
   return (
     <div style={ styles.root }>
       <div style={ styles.stepper }>
@@ -36,8 +40,9 @@ function Stepper({
             title={step.title}
             href={step.href}
             onClick={step.onClick}
-            active={!(disabledSteps || []).includes(index) && index === activeStep}
-            completed={!(disabledSteps || []).includes(index) && index < activeStep}
+            active={index === activeStep}
+            completed={completedSteps.includes(index.toString())}
+            activeCompleted={activeCompleted}
             first={index === 0}
             isLast={index === steps.length - 1}
             index={index}
@@ -45,11 +50,15 @@ function Stepper({
             completeColor={completeColor}
             defaultColor={defaultColor}
             circleFontColor={circleFontColor}
+            activeCircleFontColor={activeCircleFontColor}
+            completeCircleFontColor={completeCircleFontColor}
             activeTitleColor={activeTitleColor}
             completeTitleColor={completeTitleColor}
             defaultTitleColor={defaultTitleColor}
             size={size}
+            activeCircleSize={activeCircleSize}
             circleFontSize={circleFontSize}
+            activeCircleFontSize={activeCircleFontSize}
             titleFontSize={titleFontSize}
             circleTop={circleTop}
             titleTop={titleTop}
@@ -68,6 +77,8 @@ function Stepper({
             activeBorderStyle={activeBorderStyle}
             defaultBarColor={defaultBarColor}
             completeBarColor={completeBarColor}
+            defaultBarThickness={defaultBarThickness}
+            completeBarThickness={completeBarThickness}
           />
         )) }
       </div>
@@ -77,10 +88,12 @@ function Stepper({
 
 Stepper.defaultProps = {
   activeStep: 0,
+  activeCompleted: false
 };
 
 Stepper.propTypes = {
   activeStep: PropTypes.number,
+  activeCompleted: PropTypes.bool,
   steps: PropTypes.array,
   activeColor: PropTypes.string,
   completeColor: PropTypes.string,
